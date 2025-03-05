@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Glitch Challenge</title>
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
+
+			body {
+				background: linear-gradient(135deg, #1a001a, #4b0082);
+				color: white;
+				font-family: "Orbitron", sans-serif;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				height: 100vh;
+				overflow: hidden;
+				user-select: none;
+			}
+
+			.glitch-container {
+				position: relative;
+				text-align: center;
+				cursor: pointer; /* Add cursor pointer to indicate clickable */
+			}
+
+			.glitch {
+				font-size: 55px;
+				font-weight: bold;
+				text-transform: uppercase;
+				background: #1a001a;
+				color: white;
+				padding: 20px;
+				display: inline-block;
+				border-radius: 15px;
+				box-shadow: 10px 10px 30px rgba(255, 255, 255, 0.1),
+					-10px -10px 30px rgba(0, 0, 0, 0.5);
+				position: relative;
+				animation: glitchEffect 0.07s infinite alternate;
+			}
+
+			.paused {
+				animation-play-state: paused;
+			}
+
+			@keyframes glitchEffect {
+				0% {
+					transform: skewX(-10deg);
+					text-shadow: -6px -6px 12px #ff00ff, 6px 6px 12px #00ffff;
+				}
+				25% {
+					transform: skewX(10deg);
+					text-shadow: 6px -6px 12px #ff00ff, -6px 6px 12px #00ffff;
+				}
+				50% {
+					transform: translateX(6px);
+					text-shadow: -12px 6px 18px #ff66ff, 12px -6px 18px #66ffff;
+				}
+				75% {
+					transform: translateX(-6px);
+					text-shadow: -6px 12px 18px #ff00ff, 6px -12px 18px #00ffff;
+				}
+				100% {
+					transform: skewX(-10deg);
+					text-shadow: -12px -6px 18px #ff00ff, 12px 6px 18px #00ffff;
+				}
+			}
+
+			.glitch::before,
+			.glitch::after {
+				content: attr(data-text);
+				position: absolute;
+				left: 0;
+				width: 100%;
+				opacity: 0.8;
+			}
+
+			.glitch::before {
+				top: -3px;
+				left: 3px;
+				color: #ff00ff;
+				animation: glitchText 0.07s infinite alternate;
+			}
+
+			.glitch::after {
+				top: 3px;
+				left: -3px;
+				color: #00ffff;
+				animation: glitchText 0.07s infinite alternate-reverse;
+			}
+
+			.paused::before,
+			.paused::after {
+				animation-play-state: paused;
+			}
+
+			@keyframes glitchText {
+				0% {
+					clip-path: inset(0 0 60% 0);
+				}
+				50% {
+					clip-path: inset(60% 0 0 0);
+				}
+				100% {
+					clip-path: inset(0 0 60% 0);
+				}
+			}
+
+			.input-container {
+				margin-top: 20px;
+			}
+
+			input {
+				font-size: 20px;
+				padding: 10px;
+				border: none;
+				outline: none;
+				border-radius: 10px;
+				text-align: center;
+				background: #2a002a;
+				color: white;
+				box-shadow: inset 4px 4px 10px rgba(255, 255, 255, 0.1),
+					inset -4px -4px 10px rgba(0, 0, 0, 0.6);
+			}
+
+			button {
+				margin-top: 10px;
+				padding: 10px 20px;
+				font-size: 18px;
+				border: none;
+				cursor: pointer;
+				border-radius: 10px;
+				background: #ff00ff;
+				color: white;
+				box-shadow: 4px 4px 10px rgba(255, 255, 255, 0.2),
+					-4px -4px 10px rgba(0, 0, 0, 0.5);
+			}
+
+			button:hover {
+				background: #d400d4;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="glitch-container" id="glitch-container">
+			<div class="glitch" id="glitch-text" data-text="LOADING...">
+				LOADING...
+			</div>
+		</div>
+
+		<script>
+			const words = [
+				"ERROR",
+				"GLITCH",
+				"SYSTEM",
+				"CODE",
+				"MATRIX",
+				"VOID",
+				"HACK",
+				"LOADING",
+				"WARNING",
+				"BUG",
+				"DECRYPT",
+				"STATIC",
+				"ACCESS",
+				"FAIL",
+				"REDIRECT",
+				"ANOMALY",
+				"BREACH",
+				"NODE",
+				"CORRUPT",
+				"BYTE",
+				"EXCEPTION",
+				"FATAL",
+				"STACK",
+				"NULL",
+				"ROOT",
+				"OVERFLOW",
+				"CRASH",
+				"SYNTAX",
+				"LOOP",
+				"COMPILER",
+				"SHADOW",
+				"VIRUS",
+				"MALWARE",
+				"EXECUTE",
+				"DEBUG",
+				"BINARY",
+				"ENCRYPT",
+				"UCDVVVGWI",
+			];
+
+			const secretMessage = "UCDVVVGWI"; // VIGENERE CIPHER
+			const encryptionKey = "CYBER";
+
+			console.log(" Encryption Key: CYBER");
+
+			let counter = 0;
+			let textInterval;
+			let isPaused = false;
+
+			function updateText() {
+				const glitchText = document.getElementById("glitch-text");
+				if (counter === 34) {
+					glitchText.textContent = secretMessage;
+					glitchText.setAttribute("data-text", secretMessage);
+					counter = 0;
+				} else {
+					glitchText.textContent =
+						words[Math.floor(Math.random() * words.length)];
+					glitchText.setAttribute(
+						"data-text",
+						glitchText.textContent
+					);
+					counter++;
+				}
+			}
+
+			function startTextAnimation() {
+				textInterval = setInterval(updateText, 350);
+			}
+
+			function pauseAnimation() {
+				if (!isPaused) {
+					clearInterval(textInterval);
+					const glitchElement =
+						document.getElementById("glitch-text");
+					glitchElement.classList.add("paused");
+					isPaused = true;
+				}
+			}
+
+			function resumeAnimation() {
+				if (isPaused) {
+					startTextAnimation();
+					const glitchElement =
+						document.getElementById("glitch-text");
+					glitchElement.classList.remove("paused");
+					isPaused = false;
+				}
+			}
+
+			// Add event listeners for mouse interactions
+			const glitchContainer = document.getElementById("glitch-container");
+			glitchContainer.addEventListener("mousedown", pauseAnimation);
+			glitchContainer.addEventListener("mouseup", resumeAnimation);
+			glitchContainer.addEventListener("mouseleave", resumeAnimation); // Resume if mouse leaves while pressed
+
+			// Add touch support for mobile devices
+			glitchContainer.addEventListener("touchstart", function (e) {
+				e.preventDefault(); // Prevent default touch behavior
+				pauseAnimation();
+			});
+
+			glitchContainer.addEventListener("touchend", function (e) {
+				e.preventDefault(); // Prevent default touch behavior
+				resumeAnimation();
+			});
+
+			startTextAnimation();
+		</script>
+	</body>
+</html>
